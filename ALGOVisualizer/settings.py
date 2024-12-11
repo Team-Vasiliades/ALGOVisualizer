@@ -78,14 +78,13 @@ WSGI_APPLICATION = 'ALGOVisualizer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user_info',
-        'USER': 'Sayman',
-        'PASSWORD': 'Sayman@2007',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': 'mydb',
+        'USER': 'kaustubh',
+        'PASSWORD': 'Tilkhanha27',
+        'HOST': 'Kaustubh2007',
+        'PORT': '2007',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
