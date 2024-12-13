@@ -140,3 +140,13 @@ nav{
             padding-right: 4rem !important;
         }
     }
+/* This is styling for Register page */
+
+.register{
+    background-image: url("static/back.webp");
+}
+.registerdiv{
+    background-color: rgba(22, 21, 21,0.5);
+    height: 38.3rem;
+    width: 40rem;
+}
