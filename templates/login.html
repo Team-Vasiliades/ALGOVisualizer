@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="loginbg flex justify-center">
+    <div class=" border-2 border-white my-16 loginhead rounded-3xl">
+        <h1 class="text-white text-center text-4xl my-5 font-serif headings">Welcome to AlgoVisualizer</h1>
+        <h2 class="text-white text-center text-4xl font-serif font-bold headings">Login</h2>
+        <div class="flex flex-col h-96 w-96 my-5 mx-40 inputdiv">
+            <input class=" text-white my-2 h-12 w-80 border-white border-2 px-2 input rounded-xl " type="text"
+                placeholder="Username">
+            <input class=" text-white my-2 h-12 w-80 border-white border-2 px-2 input rounded-xl " type="password"
+                placeholder="Password">
+            <label class="rememberme mx-24 text-white font-serif my-2"><input type="checkbox">Remember Me</label>
+            <button class="loginbtn h-10 w-80 bg-red-700 my-10 text-white rounded-3xl hover:bg-red-900">Login</button>
+            <p class="text-white text-lg createacc">Don't have an account?<a class="text-blue-500"
+                    href="{% url 'register' %}">Create Account</a></p>
+        </div>
+    </div>
+</body>
+
+</html>
