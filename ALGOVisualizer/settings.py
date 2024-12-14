@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jg0g$^a7)b0-8th2kd)$xz8ykb4=d(fis93=2ov2*1+)qqidbv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['algovisualisers.com', 'kaustubhcode.com', '127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,10 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'user_info',
-        'USER': 'kaustubh',
-        'PASSWORD': 'Tilkhanha27',
-        'HOST': 'Kaustubh2007',
-        'PORT': '2007', 
+        'USER': 'Sayman',
+        'PASSWORD': 'Sayman@2007',
+        'HOST': 'localhost',
+        'PORT': '3306', 
     }
 }
 

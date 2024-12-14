@@ -1,12 +1,18 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login,logout,authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomUserCreationForm
+from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import logout, authenticate, login
 
 # Create your views here.
 def index(request):
    if request.user.is_anonymous:
       return redirect("/login")
    return render(request,'index.html')
+
+def about(request):
+   return render(request,'contact.html')
 
 def loginuser(request):
    if request.method == "POST":
@@ -25,13 +31,6 @@ def loginuser(request):
 def logoutuser(request):
    logout(request)
    return redirect("/login")
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
-from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
