@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Insertion Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define the animation for sliding in from the top */
+        @keyframes slideInFromTop {
+            from {
+                transform: translateY(-70px); /* Start above */
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0); /* End at the original position */
+                opacity: 1;
+            }
+        }
+
+        /* Apply the animation to the inserted elements */
+        .insert-animation {
+            animation: slideInFromTop 1s ease-in-out; /* Duration and easing */
+        }
+
+        @keyframes slideOutToTop {
+            from {
+                transform: translateY(0); /* Start at the original position */
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-70px); /* Move up */
+                opacity: 0;
+            }
+        }
+
+        .delete-animation {
+            animation: slideOutToTop 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="insertion">
+    <div class="flex justify-between">
+        <form method="POST" id="insert-form">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <h1 class="text-white text-[40px] font-serif italic h-14">Insertion & </h1>
+                <h1 class="text-white text-[40px] font-serif italic extended-underline h-14">Deletion</h1>
+            </div>
+        </form>
+    </div>
+
+    <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+
+    <div class="flex flex-col items-center">
+        <div class="flex justify-center mb-20 mt-24 container-insert">
+            <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                type="number" name="element0" id="element0" value="{{ elements.0 }}" autofocus required>
+            <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                type="number" name="element1" id="element1" value="{{ elements.1 }}" required>
+            <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                type="number" name="element2" id="element2" value="{{ elements.2 }}" required>
+            <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                type="number" name="element3" id="element3" value="{{ elements.3 }}" required>
+        </div>
+
+        <div class="flex">
+            <div class="flex flex-col px-5 items-center font-serif">
+                <input id="new-value" type="number" placeholder="Value" name="value" value="{{value}}" class="p-2 border rounded-lg text-black" required/>
+                <input id="position" type="number" placeholder="Position" name="position" value="{{position}}" class="p-2 border rounded-lg text-black" required/>
+                <input type="range" id="speed" min="1" max="1000" value="100" name="speed" class="m-4 cursor-pointer" required/>
+                <label for="speed" class="text-white text-center bg-black rounded-md w-32">
+                    Speed:
+                    <span id="speed-value">100</span> ms
+                </label>
+            </div>
+        </div>
+
+        <div class="flex justify-center my-5">
+            <button type="button" id="insert-button" class="bg-red-600 rounded-xl text-white font-serif h-10 w-32 hover:bg-red-800 focus:bg-red-800">
+                Insert
+            </button>
+            <button type="button" id="delete-button" class="bg-green-600 rounded-xl text-white font-serif h-10 w-32 hover:bg-green-800 focus:bg-green-800 ml-4">
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <ul>
+        {% for element in elements %}
+        <li class="text-white">{{element}}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Function to shift focus to the next input field when "Enter" is pressed
+        function shiftFocus(event) {
+            if (event.key === "Enter") {
+                const inputs = document.querySelectorAll('.elements');
+                const currentIndex = Array.from(inputs).indexOf(event.target);
+                if (currentIndex < inputs.length - 1) {
+                    inputs[currentIndex + 1].focus();
+                }
+            }
+        }
+        // Add the event listener to all elements
+        const inputElements = document.querySelectorAll('.elements');
+        inputElements.forEach(input => {
+            input.addEventListener('keydown', shiftFocus);
+        });
+
+        document.getElementById('insert-button').addEventListener('click', function() {
+            // Get the new value and position from the input fields
+            const newValue = document.getElementById('new-value').value;
+            const newPosition = parseInt(document.getElementById('position').value);
+            const container = document.querySelector('.container-insert');
+            
+            // Create a new input element
+            const newInput = document.createElement('input');
+            newInput.className = "elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2";
+            newInput.value = newValue;
+            newInput.name = "elements";
+            newInput.type = 'number';
+            newInput.setAttribute('required', 'true');
+            newInput.id = `element${newPosition}`; // New ID for the new input
+
+            // Insert the new input field at the specified position
+            const inputs = container.getElementsByClassName('elements');
+            if (newPosition <= inputs.length) {
+                // Insert at the desired position
+                container.insertBefore(newInput, inputs[newPosition]);
+            } else {
+                // If the position is beyond the current inputs, append at the end
+                container.appendChild(newInput);
+            }
+
+            // Apply the animation class to the newly inserted input field
+            newInput.classList.add('insert-animation');
+
+            // Adjust IDs of subsequent elements
+            for (let i = newPosition; i < inputs.length + 1; i++) {
+                inputs[i] && (inputs[i].id = `element${i + 1}`);
+            }
+        });
+
+        document.getElementById('delete-button').addEventListener('click', function() {
+            const removeValue = document.getElementById('new-value').value;
+            const removePosition = parseInt(document.getElementById('position').value);
+            const container = document.querySelector('.container-insert');
+            
+            // Get all the input elements
+            const inputs = container.getElementsByClassName('elements');
+            
+            // Ensure position is valid and within range
+            if (removePosition < inputs.length && removePosition >= 0) {
+                const inputToDelete = inputs[removePosition];
+                
+                // Check if the value of the input to delete matches the removeValue
+                if (inputToDelete.value == removeValue) {
+                    // Apply the delete animation
+                    inputToDelete.classList.add('delete-animation');
+
+                    // After the animation ends, remove the element
+                    inputToDelete.addEventListener('animationend', function() {
+                        inputToDelete.remove();
+                    });
+
+                    // Adjust IDs of remaining elements
+                    for (let i = removePosition; i < inputs.length - 1; i++) {
+                        inputs[i + 1].id = `element${i}`; // Adjust IDs after deletion
+                    }
+                } else {
+                    alert("Value does not match the element at the specified position.");
+                }
+            } else {
+                alert("Invalid position.");
+            }
+        });
+    </script>
+</body>
+</html>

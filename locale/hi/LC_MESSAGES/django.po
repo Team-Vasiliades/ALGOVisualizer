@@ -1,0 +1,193 @@
+# Hindi translations for AlgoVisualizer
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AlgoVisualizer 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-21 20:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Hindi <hi@li.org>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+
+#: templates/index.html:75
+msgid "English"
+msgstr "अंग्रेज़ी"
+
+#: templates/index.html:76
+msgid "Spanish"
+msgstr "स्पैनिश"
+
+#: templates/index.html:77
+msgid "French"
+msgstr "फ़्रांसीसी"
+
+#: templates/index.html:78
+msgid "German"
+msgstr "जर्मन"
+
+#: templates/index.html:79
+msgid "Hindi"
+msgstr "हिंदी"
+
+#: templates/index.html:80
+msgid "Bengali"
+msgstr "बंगाली"
+
+#: templates/index.html:81
+msgid "Malayalam"
+msgstr "मलयालम"
+
+#: templates/index.html:82
+msgid "Tamil"
+msgstr "तमिल"
+
+#: templates/index.html:83
+msgid "Telugu"
+msgstr "तेलुगू"
+
+#: templates/index.html:84
+msgid "Marathi"
+msgstr "मराठी"
+
+#: templates/index.html:85
+msgid "Gujarati"
+msgstr "गुजराती"
+
+#: templates/index.html:86
+msgid "Kannada"
+msgstr "कन्नड़"
+
+#: templates/index.html:87
+msgid "Punjabi"
+msgstr "पंजाबी"
+
+#: templates/index.html:88
+msgid "Urdu"
+msgstr "उर्दू"
+
+#: templates/index.html:89
+msgid "Arabic"
+msgstr ""
+
+#: templates/index.html:90
+msgid "Portuguese"
+msgstr ""
+
+#: templates/index.html:91
+msgid "Russian"
+msgstr ""
+
+#: templates/index.html:92
+msgid "Turkish"
+msgstr ""
+
+#: templates/index.html:93
+msgid "Swedish"
+msgstr ""
+
+#: templates/index.html:94
+#, fuzzy
+#| msgid "English"
+msgid "Polish"
+msgstr "अंग्रेज़ी"
+
+#: templates/index.html:95
+msgid "Hebrew"
+msgstr ""
+
+#: templates/index.html:96
+msgid "Indonesian"
+msgstr ""
+
+# Translations for AlgoVisualizer
+#: templates/index.html:101
+msgid "AlgoVisualizer"
+msgstr "एल्गोविज़ुअलाइज़र"
+
+#: templates/index.html:105
+msgid "Sorting"
+msgstr "सॉर्टिंग"
+
+#: templates/index.html:107
+msgid ""
+"Sorting is like putting things in order. Imagine you have a bunch of numbers "
+"or toys scattered around, and you want to arrange them from the smallest to "
+"the biggest (or biggest to smallest). Sorting helps you organize them. There "
+"are different ways to do it, like comparing and swapping items until they’re "
+"in the right order. It’s like tidying up but with numbers or things!"
+msgstr ""
+"सॉर्टिंग का मतलब चीजों को क्रमबद्ध करना है। कल्पना करें कि आपके पास कुछ संख्याएँ या खिलौने "
+"बिखरे हुए हैं, और आप उन्हें सबसे छोटे से सबसे बड़े (या सबसे बड़े से सबसे छोटे) तक सजा चाहते हैं। "
+"सॉर्टिंग आपको इन्हें व्यवस्थित करने में मदद करती है। इसे करने के अलग-अलग तरीके हैं, जैसे कि "
+"आइटम्स को तुलना करके और उन्हें सही क्रम में लाने तक स्वैप करना। यह ठीक उसी तरह है जैसे आप "
+"चीजों को साफ करते हैं, लेकिन यहाँ हम संख्याओं या वस्तुओं के साथ ऐसा करते हैं।"
+
+#: templates/index.html:113
+msgid "Stack"
+msgstr "स्टैक"
+
+#: templates/index.html:115
+#, fuzzy
+#| msgid ""
+#| "A <b>stack</b> is like a stack of plates. You put plates on top one by "
+#| "one, and when you need a plate, you take the one on the top. In a stack, "
+#| "you can only add or remove things from the top, like stacking and "
+#| "unstacking plates. It's called \"Last In, First Out\" (LIFO) because the "
+#| "last thing you add is the first one you take out."
+msgid ""
+"A <b>stack</b> is like a stack of plates. You put plates on top one by one, "
+"and when you need a plate, you take the one on the top. In a stack, you can "
+"only add or remove things from the top, like stacking and unstacking plates. "
+"It's called \\"
+msgstr ""
+"एक <b>स्टैक</b> प्लेटों के ढेर की तरह है। आप प्लेटों को एक-एक करके ऊपर रखते हैं, और जब आपको "
+"एक प्लेट चाहिए, तो आप ऊपर वाली प्लेट लेते हैं। स्टैक में आप केवल चीजों को ऊपर से जोड़ या हटा "
+"सकते हैं, जैसे प्लेटों को ढेर लगाना और उतारना। इसे \"लास्ट इन, फर्स्ट आउट\" (LIFO) कहा "
+"जाता है क्योंकि आखिरी जोड़ा गया आइटम पहले लिया जाता है।"
+
+#: templates/index.html:121
+msgid "Queue"
+msgstr "क्यू"
+
+#: templates/index.html:123
+msgid ""
+"A <b>queue</b> is like a line of people waiting for something, where the "
+"first person in the line is served first. This is called **First In, First "
+"Out (FIFO)**. For example, when waiting in line for a bus, the person who "
+"comes first gets on the bus first. In computers, queues are used to manage "
+"tasks like processing messages or printing documents, ensuring everything "
+"happens in the right order."
+msgstr ""
+"एक <b>क्यू</b> उन लोगों की कतार की तरह है जो कुछ पाने के लिए इंतजार कर रहे हैं, जहां "
+"कतार में सबसे पहले खड़ा व्यक्ति सबसे पहले सेवा प्राप्त करता है। इसे **फर्स्ट इन, फर्स्ट आउट "
+"(FIFO)** कहा जाता है। उदाहरण के लिए, जब आप बस के लिए कतार में खड़े होते हैं, तो जो "
+"व्यक्ति पहले आता है, वह सबसे पहले बस में चढ़ता है। कंप्यूटरों में, क्यू का उपयोग संदेशों को प्रोसेस "
+"करने या दस्तावेज़ों को प्रिंट करने जैसे कार्यों को प्रबंधित करने के लिए किया जाता है, ताकि सब "
+"कुछ सही क्रम में हो।"
+
+#~ msgid "Profile Photo"
+#~ msgstr "प्रोफ़ाइल फोटो"
+
+#~ msgid "default Profile Photo"
+#~ msgstr "डिफ़ॉल्ट प्रोफ़ाइल फोटो"
+
+#~ msgid "Your Profile"
+#~ msgstr "आपकी प्रोफ़ाइल"
+
+#~ msgid "Sign In / Sign Up"
+#~ msgstr "साइन इन / साइन अप"
+
+#~ msgid "Contact Us"
+#~ msgstr "संपर्क करें"
+
+#~ msgid "Chat with Us"
+#~ msgstr "हमसे चैट करें"

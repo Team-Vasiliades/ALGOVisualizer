@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Data Structure Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .box {
+            border: 2px solid white;
+            border-radius: 20%;
+            height: 67px;
+            width: 67px;
+            display: inline-block;
+            background-color: rgba(22,21,21,0.9);
+            margin: 5px;
+            padding: 0;
+            padding-top: 20px;
+            color: white;
+            font-family: serif;
+            text-align: center;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body class="queue-body">
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="flex justify-between">
+        <div>
+            <h1 class="text-4xl font-serif text-white mt-5 ml-3">Data Structure Visualizer</h1>
+            <p class="w-96 text-white m-3 text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem reprehenderit
+                corporis asperiores dolorum
+                illo recusandae, saepe et autem beatae hic quos molestiae minus dicta eligendi, quas porro praesentium
+                consequatur laborum cumque. Tenetur recusandae porro veniam quod ad adipisci earum eius exercitationem
+                enim corporis blanditiis explicabo mollitia, minus dignissimos non saepe ipsum excepturi illum
+                distinctio? Odit autem voluptates aliquam rerum, magni nulla quae, saepe numquam, in non temporibus quas
+                vitae? Deleniti aliquam rerum sed fugiat tenetur alias, porro dolor quidem magni quia veniam ipsum earum
+                maiores esse ratione laboriosam inventore repudiandae vel a placeat autem quasi labore optio aperiam!
+                Esse, sapiente. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid dicta saepe omnis
+                voluptatem ullam vitae harum sit. Natus veritatis neque doloremque ea earum harum perspiciatis facere
+                impedit. Nesciunt impedit aut laborum inventore quaerat quod tempora ullam amet sapiente alias ipsam
+                optio voluptatem consectetur, quis enim blanditiis itaque reiciendis eligendi aperiam eum cupiditate
+                culpa dolorum, repudiandae nam!</p>
+        </div>
+        <div class="flex flex-col items-center">
+            <div class="mt-5 mb-10">
+                <label for="structure" class="text-white text-xl font-serif ">Select Data Structure:</label>
+                <select id="structure"
+                    class="rounded-xl h-8 border-2 border-white queue-select text-white font-serif bg-black">
+                    <option value="queue" class="bg-black font-serif text-white">Queue</option>
+                    <option value="deque" class="bg-black font-serif text-white">Deque</option>
+                    <option value="circular_queue" class="bg-black font-serif text-white">Circular Queue</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <input type="number" id="inputValue" placeholder="Enter value"
+                    class="h-12 w-80 rounded-xl p-2 text-white font-serif bg-black border-2 border-white">
+                <div class="flex ml-2">
+                    <button onclick="enqueue()"
+                        class="h-10 w-32 bg-red-700 rounded-xl text-white font-serif text-md mr-2 mt-5">Enqueue</button>
+                    <button onclick="dequeue()"
+                        class="h-10 w-32 bg-red-700 rounded-xl text-white font-serif text-md mr-2 mt-5">Dequeue</button>
+                    <button onclick="addFront()" id="addFrontBtn" style="display: inline-block;"
+                        class="h-10 w-32 bg-red-700 rounded-xl text-white font-serif text-md mr-2 mt-5">Add
+                        Front</button>
+                    <button onclick=" removeFront()" id="removeFrontBtn" style="display: inline-block;"
+                        class="h-10 w-32 bg-red-700 rounded-xl text-white font-serif text-md mr-2 mt-5">Remove
+                        Front</button>
+                    <button onclick=" removeRear()" id="removeRearBtn" style="display: inline-block;"
+                        class="h-10 w-32 bg-red-700 rounded-xl text-white font-serif text-md mr-2 mt-5">Remove
+                        Rear</button>
+                </div>
+            </div>
+            <div id="visualizer" class="mt-40 pr-10 ml-8">
+            </div>
+
+            <p id="error" class="text-xl text-white w-auto px-2 font-serif rounded-xl py-2 mt-48 ml-10"></p>
+        </div>
+        <div class="h-40 w-96">
+
+        </div>
+    </div>
+    <script>
+        let dataStructure = "queue";
+        let elements = [];
+
+        const structureSelector = document.getElementById("structure");
+        const inputValue = document.getElementById("inputValue");
+        const visualizer = document.getElementById("visualizer");
+        const errorDisplay = document.getElementById("error");
+
+        // Update UI based on the selected structure
+        structureSelector.addEventListener("change", () => {
+            dataStructure = structureSelector.value;
+            updateButtonsVisibility();
+            elements = [];
+            render();
+        });
+
+        // Update visibility of buttons for deque
+        function updateButtonsVisibility() {
+            document.getElementById("addFrontBtn").style.display =
+                dataStructure === "deque" ? "inline-block" : "none";
+            document.getElementById("removeFrontBtn").style.display =
+                dataStructure === "deque" ? "inline-block" : "none";
+            document.getElementById("removeRearBtn").style.display =
+                dataStructure === "deque" ? "inline-block" : "none";
+        }
+
+        // Render the structure visually
+        function render() {
+            visualizer.innerHTML = "";
+            elements.forEach((item, index) => {
+                const box = document.createElement("div");
+                box.className = "box";
+                box.textContent = item;
+                if (dataStructure === "circular_queue") {
+                    box.style.position = "absolute";
+                    const angle = (360 / 5) * index;
+                    box.style.transform = `rotate(${angle}deg) translate(120px) rotate(-${angle}deg)`;
+                }
+                visualizer.appendChild(box);
+            });
+            errorDisplay.textContent = "";
+        }
+
+        // Add element to the back
+        function enqueue() {
+            if (elements.length >= 5) {
+                errorDisplay.textContent = "Error: Cannot add more than 5 elements.";
+                return;
+            }
+            if (inputValue.value === "") {
+                errorDisplay.textContent = "Error: Please enter a value.";
+                return;
+            }
+            elements.push(inputValue.value);
+            inputValue.value = "";
+            render();
+        }
+
+        // Remove element from the front
+        function dequeue() {
+            if (elements.length === 0) {
+                errorDisplay.textContent = "Error: No elements to remove.";
+                return;
+            }
+            elements.shift();
+            render();
+        }
+
+        // Add element to the front (for deque)
+        function addFront() {
+            if (elements.length >= 5) {
+                errorDisplay.textContent = "Error: Cannot add more than 5 elements.";
+                return;
+            }
+            if (inputValue.value === "") {
+                errorDisplay.textContent = "Error: Please enter a value.";
+                return;
+            }
+            elements.unshift(inputValue.value);
+            inputValue.value = "";
+            render();
+        }
+
+        // Remove element from the front (for deque)
+        function removeFront() {
+            dequeue();
+        }
+
+        // Remove element from the rear (for deque)
+        function removeRear() {
+            if (elements.length === 0) {
+                errorDisplay.textContent = "Error: No elements to remove.";
+                return;
+            }
+            elements.pop();
+            render();
+        }
+
+        // Initialize
+        updateButtonsVisibility();
+        render();
+    </script>
+
+
+</body>
+
+</html>

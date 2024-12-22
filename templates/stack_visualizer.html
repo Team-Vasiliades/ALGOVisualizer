@@ -1,0 +1,81 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Stack Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .word-wrap {
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body class="stack-body">
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="stack flex justify-between">
+        <div class="word-wrap">
+            <h1 class="text-white font-serif text-5xl mt-3 ml-5">{% trans "Stack" %}</h1>
+            <p class="w-[400px] text-white p-3 mt-3 ml-3">
+                {% blocktrans %}
+                A stack is a type of data structure that follows the "Last In, First Out" (LIFO) principle. This means that the last element added to the stack is the first one to be removed. You can think of a stack like a stack of plates. When you add a new plate, you place it on top. To remove a plate, you take the one from the top. The same concept applies to a stack in computer science.
+            
+                A stack is used in many computer programs and algorithms. For example, in web browsers, the "back" button uses a stack to remember the pages you've visited. When you press the back button, the browser pops the last page from the stack and shows it.
+                {% endblocktrans %}
+            </p>            
+        </div>
+        <div>
+            <form method="POST" action=".">
+                {% csrf_token %}
+                <div>
+                    <input type="number" name="value" placeholder="Enter a value"
+                        class="h-12 w-80 rounded-xl stackinput p-2 mt-10 text-white font-serif border-0 focus:border-none focus:ring-0 focus:outline-none">
+                    <div class="flex justify-between mt-5 px-2">
+                        <button type="submit" name="operation" value="push"
+                            class="h-12 w-20 bg-red-700 rounded-xl text-white font-serif hover:bg-red-900">Push</button>
+                        <button type="submit" name="operation" value="pop"
+                            class="h-12 w-20 bg-red-700 rounded-xl text-white font-serif hover:bg-red-900">Pop</button>
+                        <button type="submit" name="operation" value="top"
+                            class="h-12 w-20 bg-red-700 rounded-xl text-white font-serif hover:bg-red-900">Top</button>
+                    </div>
+                </div>
+            </form>
+            <div class="flex flex-col justify-center mt-5 items-center">
+                <!-- Display messages -->
+                {% if messages %}
+                <div
+                    class="border-2 border-white h-10 w-auto px-2 flex justify-center items-center text-white bg-red-800 font-serif rounded-2xl">
+                    {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="h-[350px] w-32 stack-container mt-10 flex flex-col items-center">
+                    {% for item in stack %}
+                    <div
+                        class="h-12 w-28 border-2 border-white stack-item text-center text-white text-2xl font-serif my-2 rounded-xl">
+                        {{ item }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if top %}
+                <p>Top element: {{ top }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="h-[500px] w-80">
+
+        </div>
+    </div>
+</body>
+
+</html>

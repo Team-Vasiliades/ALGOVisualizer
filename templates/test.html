@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Tree Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .buttons {
+            margin: 20px;
+        }
+
+        .buttons button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .node {
+            width: 70px;
+            height: 70px;
+            background-color: lightblue;
+            border-radius: 50%;
+            border: 2px solid blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .node-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .line {
+            position: absolute;
+            background-color: black;
+        }
+
+        .vertical-line {
+            width: 2px;
+            background-color: black;
+            position: absolute;
+        }
+
+        .horizontal-line {
+            height: 2px;
+            background-color: black;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Binary Tree Visualization</h1>
+
+    <div class="buttons">
+        <button id="insert">Insert Node</button>
+        <button id="delete">Delete Node</button>
+        <button id="clear">Clear Tree</button>
+    </div>
+
+    <div id="tree-container" class="tree"></div>
+
+    <script>
+        class BinaryTree {
+            constructor(maxNodes) {
+                this.nodes = [];
+                this.maxNodes = maxNodes;
+            }
+
+            insert(value) {
+                if (this.nodes.length >= this.maxNodes) {
+                    alert("Maximum nodes reached.");
+                    return;
+                }
+                this.nodes.push(value);
+                this.render();
+            }
+
+            delete() {
+                if (this.nodes.length === 0) {
+                    alert("No nodes to delete.");
+                    return;
+                }
+                this.nodes.pop();
+                this.render();
+            }
+
+            clear() {
+                this.nodes = [];
+                this.render();
+            }
+
+            render() {
+                const treeContainer = document.getElementById('tree-container');
+                treeContainer.innerHTML = '';
+
+                const positions = [
+                    [0],
+                    [-150, 150],
+                    [-200, -100, 100, 200],
+                    [-250, -150, -50, 50, 150, 250, 350, 450]
+                ];
+
+                let levelIndex = 0;
+                let currentIndex = 0;
+
+                while (currentIndex < this.nodes.length) {
+                    const levelContainer = document.createElement('div');
+                    levelContainer.className = 'level';
+
+                    const currentLevelPositions = positions[levelIndex];
+
+                    for (let i = 0; i < currentLevelPositions.length; i++) {
+                        if (currentIndex >= this.nodes.length) break;
+
+                        const nodeContainer = document.createElement('div');
+                        nodeContainer.className = 'node-container';
+
+                        const node = document.createElement('div');
+                        node.className = 'node';
+                        node.innerText = this.nodes[currentIndex];
+                        nodeContainer.style.position = 'relative';
+                        nodeContainer.style.left = `${currentLevelPositions[i]}px`;
+
+                        if (levelIndex > 0) {
+                            // Vertical line to child
+                            const verticalLine = document.createElement('div');
+                            verticalLine.className = 'vertical-line';
+                            verticalLine.style.height = '40px';
+                            verticalLine.style.width = '2px';
+                            verticalLine.style.top = '-40px';
+                            verticalLine.style.left = '34px';
+
+                            // Horizontal line to child
+                            const horizontalLine = document.createElement('div');
+                            horizontalLine.className = 'horizontal-line';
+                            horizontalLine.style.width = '100px';
+                            horizontalLine.style.height = '2px';
+                            horizontalLine.style.top = '-40px';
+                            horizontalLine.style.left = currentLevelPositions[i] > 0 ? '-100px' : '0';
+
+                            nodeContainer.appendChild(verticalLine);
+                            nodeContainer.appendChild(horizontalLine);
+                        }
+
+                        nodeContainer.appendChild(node);
+                        levelContainer.appendChild(nodeContainer);
+                        currentIndex++;
+                    }
+
+                    treeContainer.appendChild(levelContainer);
+                    levelIndex++;
+                }
+            }
+        }
+
+        const tree = new BinaryTree(15);
+
+        document.getElementById('insert').addEventListener('click', () => {
+            const value = prompt("Enter value to insert:");
+            if (value) tree.insert(value);
+        });
+
+        document.getElementById('delete').addEventListener('click', () => {
+            tree.delete();
+        });
+
+        document.getElementById('clear').addEventListener('click', () => {
+            tree.clear();
+        });
+    </script>
+</body>
+</html>

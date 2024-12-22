@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link  rel="stylesheet" href="/static/style.css">
+    <title>Chat App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="chat-body">
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="chat-container">
+        <div class="room-list">
+            <h1 class="wtc">Welcome To Chat</h1>
+            <div class="rooms">
+                <a href="/chat/AI" class="roomsbtn rounded-xl">AlgoAI</a>
+                <a href="/chat/Room1" class="roomsbtn rounded-xl">Public Room 1</a>
+                <a href="/chat/Room2" class="roomsbtn rounded-xl">Public Room 2</a>
+                <a href="/chat/Room3" class="roomsbtn rounded-xl">Public Room 3</a>
+                <a href="/chat/Room4" class="roomsbtn rounded-xl">Public Room 4</a>
+                <a href="/chat/Room5" class="roomsbtn rounded-xl">Public Room 5</a>
+            </div>
+        </div>
+
+        <div class="chat-room">
+            <h1 class="room-head">{{ room_name }}</h1>
+            <div class="message" id="chatTextArea">
+                {% if chats %}
+                {% for i in chats %}
+                <p><b>{{ i.user }}:</b> {{ i.chat_content }}</p><br>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="chat-input">
+                <input class="input-msg rounded-xl p-2" id="input" type="text">
+                <button class="chat-btn rounded-xl m-1" id="submit">Send</button>
+            </div>
+        </div>
+    </div>
+
+    {{ room_name|json_script:"room-name" }}
+    {{ request.user|slugify|json_script:"user_username" }}
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const user_username = JSON.parse(document.getElementById('user_username').textContent);
+
+        if (!roomName || (roomName !== "AI" && !/^Room[1-5]$/.test(roomName))) {
+            document.querySelector('#chatTextArea').innerHTML =
+                '<p class="text-center text-danger">Please select a valid chat room from the left.</p>';
+        } else if (roomName === "AI") {
+            document.querySelector('#input').disabled = false;
+            document.querySelector('#submit').disabled = false;
+            document.querySelector('#submit').onclick = function () {
+                const messageInputDom = document.querySelector('#input');
+                const message = messageInputDom.value.trim();
+
+                if (message !== "") {
+                    fetch('/ai_chat/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': getCookie('csrftoken') // CSRF token
+                        },
+                        body: new URLSearchParams({
+                            'message': message
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not OK');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            document.querySelector('#chatTextArea').innerHTML += `
+                            <p><b>You:</b> ${message}</p>
+                            <p><b>AI:</b> ${data.reply}</p><br>
+                        `;
+                            const msgDiv = document.querySelector('#chatTextArea');
+                            msgDiv.scrollTop = msgDiv.scrollHeight;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to fetch AI response. Please try again later.');
+                        });
+
+                    messageInputDom.value = '';
+                }
+            };
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

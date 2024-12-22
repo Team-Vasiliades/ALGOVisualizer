@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Sorting Visualization</title>
+    <style>
+        .elements {
+            transition: transform 2s ease, background-color 2s ease;
+        }
+
+        .highlight {
+            background-color: yellow; /* Highlight during comparison */
+        }
+
+        .swap {
+            background-color: lightgreen; /* Highlight during swapping */
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="sorting">
+        <div class="flex justify-between">
+            <h1 class="text-white text-[40px] font-serif italic extended-underline h-14">Bubble Sort</h1>
+            <select name="algorithm" id="algorithm"
+                class="mx-14 my-7 h-10 rounded-xl text-white bg-black w-40 font-serif italic">
+                <option href="" class="font-serif" value="bubble">Bubble Sort</option>
+                <option class="font-serif" value="selection">Selection Sort</option>
+                <option href="/inssort" class="font-serif" value="insertion">Insertion Sort</option>
+                <option href="/msort" class="font-serif" value="merge">Merge Sort</option>
+                <option href="/qsort" class="font-serif" value="quick">Quick Sort</option>
+                <option href="/hsort" class="font-serif" value="heap">Heap Sort</option>
+            </select>
+        </div>
+        <p class="text-white"><b>Bubble Sort</b> is another simple way to sort numbers or items. It compares adjacent numbers and swaps them if they are in the wrong order. Here's how it works:
+
+            1. Start at the beginning of the list.
+            2. Compare the first number with the second number. If the first is larger, swap them.
+            3. Move to the next pair of numbers and repeat the process until you reach the end of the list.
+            4. After one pass through the list, the largest number will be at the end.
+            5. Now, ignore the last number (since it’s already in the right place) and repeat the process for the remaining numbers.
+            6. Keep repeating this process until no more swaps are needed.
+            
+            For example, if you have the list [4, 2, 5, 1], you would first compare 4 and 2, swap them to get [2, 4, 5, 1], and continue comparing and swapping until the list is sorted.
+            
+            Though bubble sort is easy to understand, it can be slow for large lists since it requires many comparisons and swaps.</p>
+            
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="flex flex-col items-center">
+                <div class="flex justify-center mb-20 mt-24">
+                    <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element0" id="element0" value="{{ elements.0 }}" autofocus required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element1" id="element1" value="{{ elements.1 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element2" id="element2" value="{{ elements.2 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element3" id="element3" value="{{ elements.3 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element4" id="element4" value="{{ elements.4 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element5" id="element5" value="{{ elements.5 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element6" id="element6" value="{{ elements.6 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element7" id="element7" value="{{ elements.7 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element8" id="element8" value="{{ elements.8 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element9" id="element9" value="{{ elements.9 }}" required> 
+                </div>
+                <div class="flex">
+                    <div class="flex flex-col px-5 items-center font-serif">
+                        <input type="range" id="speed" min="1" max="1000" value="100" name="speed"
+                            class="m-4 cursor-pointer" required />
+                        <label for="speed" class="text-white text-center bg-black rounded-md w-32">
+                            Speed:
+                            <span id="speed-value">100</span> ms
+                        </label>
+                    </div>
+                <div class="flex justify-center my-5">
+                    <button type="submit"
+                        class="bg-red-600 rounded-xl text-white font-serif h-10 w-32 hover:bg-red-800 focus:bg-red-800">
+                        Start Sorting
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('.elements');
+    
+            // Handle Enter key navigation for input fields
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault(); // Prevent default Enter key behavior
+                        const nextInput = inputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus(); // Move focus to the next input field
+                        }
+                    }
+                });
+            });
+            document.getElementById('algorithm').addEventListener('change', function() {
+                const selectedValue = this.value;
+                let url = '';
+                switch (selectedValue) {
+                    case 'bubble':
+                        url = '';
+                        break;
+                    case 'selection':
+                        url = '/ssort';
+                        break;
+                    case 'insertion':
+                        url = '/inssort';
+                        break;
+                window.location.href = url;
+            });
+    
+            // Function to swap values of two input fields visually with transitions
+            async function swapInputs(index1, index2) {
+                const el1 = inputs[index1];
+                const el2 = inputs[index2];
+    
+                // Highlight swap operation
+                el1.classList.add('swap');
+                el2.classList.add('swap');
+    
+                // Swap values with a delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const tempValue = el1.value;
+                el1.value = el2.value;
+                el2.value = tempValue;
+    
+                // Remove highlight after swap
+                el1.classList.remove('swap');
+                el2.classList.remove('swap');
+            }
+    
+            // Bubble Sort logic with visual transitions
+            async function bubbleSort() {
+                const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // Delay function for visualization
+                const speed = 1000; // Delay speed in milliseconds
+    
+                for (let i = 0; i < inputs.length - 1; i++) {
+                    for (let j = 0; j < inputs.length - 1 - i; j++) {
+                        // Highlight the elements being compared
+                        inputs[j].classList.add('highlight');
+                        inputs[j + 1].classList.add('highlight');
+    
+                        await delay(speed);
+    
+                        if (parseInt(inputs[j].value) > parseInt(inputs[j + 1].value)) {
+                            // Swap the elements if they are in the wrong order
+                            await swapInputs(j, j + 1);
+                        }
+    
+                        // Remove highlight after comparison
+                        inputs[j].classList.remove('highlight');
+                        inputs[j + 1].classList.remove('highlight');
+                    }
+                }
+            }
+    
+            // Attach event listener to the sort button
+            document.querySelector('button[type="submit"]').addEventListener('click', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                await bubbleSort(); // Start sorting
+            });
+        });
+    </script>
+</body>
+</html>

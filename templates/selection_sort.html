@@ -1,0 +1,361 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .newelements {
+        height: 64px;
+        width: 64px;
+        font-size: 24px;
+        text-align: center;
+        background-color: black;
+        color: white;
+        border-radius: 8px;
+        margin: 0 4px;
+        border: none;
+        position: absolute;
+        transition: all 0.5s ease;
+    }
+
+    .sorting {
+        display: flex;
+        justify-content: center;
+    }
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="sorting">
+    <div class="flex justify-between">
+        <form method="POST">
+            {% csrf_token %}
+            <h1 class="text-white text-[40px] font-serif italic extended-underline h-14">Sorting</h1>
+            <select name="algorithm" id="algorithm" class="mx-14 my-7 h-10 rounded-xl text-white bg-black w-40 font-serif italic">
+                <option class="font-serif" value="bubble">Bubble Sort</option>
+                <option class="font-serif" value="selection">Selection Sort</option>
+                <option class="font-serif" value="insertion">Insertion Sort</option>
+                <option class="font-serif" value="merge">Merge Sort</option>
+                <option class="font-serif" value="quick">Quick Sort</option>
+                <option class="font-serif" value="heap">Heap Sort</option>
+            </select>
+        </div>
+
+        <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+
+        <div class="flex flex-col items-center">
+            <div class="flex justify-center mb-20 mt-24 container-sort">
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element0" id="element0" value="{{ elements.0 }}" autofocus required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element1" id="element1" value="{{ elements.1 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element2" id="element2" value="{{ elements.2 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element3" id="element3" value="{{ elements.3 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element4" id="element4" value="{{ elements.4 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element5" id="element5" value="{{ elements.5 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element6" id="element6" value="{{ elements.6 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element7" id="element7" value="{{ elements.7 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element8" id="element8" value="{{ elements.8 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white rounded-lg mx-2"
+                    type="number" name="element9" id="element9" value="{{ elements.9 }}" required> 
+            </div>
+            <div class="flex">
+                <div class="flex flex-col px-5 items-center font-serif">
+                    <input type="range" id="speed" min="1" max="1000" value="100" name="speed" class="m-4 cursor-pointer" required/>
+                    <label for="speed" class="text-white text-center bg-black rounded-md w-32">
+                        Speed:
+                        <span id="speed-value">100</span> ms
+                    </label>
+                </div>
+                <div class="text-white font-serif mt-5 px-5">
+                    <input type="radio" name="option" value="ascending" id="ascending" class="cursor-pointer" required>
+                    <label for="ascending">Ascending Order</label><br>
+                    <input type="radio" name="option" value="option2" id="descending" class="cursor-pointer" required>
+                    <label for="descending">Descending Order</label><br>
+                </div>
+            </div>
+            <div class="flex justify-center my-5">
+                <button type="submit" class="bg-red-600 rounded-xl text-white font-serif h-10 w-32 hover:bg-red-800 focus:bg-red-800">
+                    Start Sorting
+                </button>
+            </div>
+        </div>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = {{ elements | safe }};
+            const container = document.querySelector('.container-sort');
+            const speedInput = document.getElementById('speed');
+            const speedDisplay = document.getElementById('speed-value');
+    
+            // Function to create input elements for sorting
+            function createElements() {
+                container.innerHTML = ''; // Clear previous elements
+                elements.forEach((value, index) => {
+                    const input = document.createElement('input');
+                    input.className = 'newelements';
+                    input.value = value;
+                    input.style.left = `${index * 80}px`; // Set position based on index
+                    input.id = `element-${index}`;
+                    input.style.position = "absolute"; // Ensure inputs are absolutely positioned
+                    container.appendChild(input);
+                });
+            }
+    
+            // Handle Enter key navigation for input fields
+            function addKeyNavigation() {
+                const inputs = container.querySelectorAll('.newelements');
+                inputs.forEach((input, index) => {
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === "Enter") {
+                            event.preventDefault(); // Prevent form submission
+                            const nextInput = inputs[index + 1];
+                            if (nextInput) {
+                                nextInput.focus(); // Focus on the next input field
+                            }
+                        }
+                    });
+                });
+            }
+    
+            // Function to visually swap elements
+            async function swapElements(idx1, idx2) {
+                const el1 = document.getElementById(`element-${idx1}`);
+                const el2 = document.getElementById(`element-${idx2}`);
+    
+                const tempLeft = el1.style.left;
+                el1.style.left = el2.style.left;
+                el2.style.left = tempLeft;
+    
+                await new Promise(resolve => setTimeout(resolve, speedInput.value));
+    
+                [elements[idx1], elements[idx2]] = [elements[idx2], elements[idx1]];
+            }
+    
+            // Selection Sort with animations
+            async function selectionSort() {
+                for (let i = 0; i < elements.length - 1; i++) {
+                    let minIdx = i;
+                    for (let j = i + 1; j < elements.length; j++) {
+                        if (elements[j] < elements[minIdx]) {
+                            minIdx = j;
+                        }
+                    }
+                    if (minIdx !== i) {
+                        await swapElements(i, minIdx);
+                    }
+                }
+            }
+    
+            // Update speed display dynamically
+            speedInput.addEventListener('input', () => {
+                speedDisplay.textContent = speedInput.value;
+            });
+    
+            // Handle Start Sorting button click
+            document.querySelector('button[type="submit"]').addEventListener('click', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                createElements(); // Re-create elements at their positions
+                addKeyNavigation(); // Rebind key navigation
+                await selectionSort(); // Start sorting
+            });
+            addKeyNavigation(); // Bind Enter key navigation on page load
+        });
+    </script>
+    
+</body>
+</html> -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Sorting Visualization</title>
+    <style>
+    .elements {
+        transition: transform 2s ease, background-color 2s ease;
+    }
+
+    .highlight {
+        background-color: yellow; /* Highlight during comparison */
+    }
+
+    .swap {
+        background-color: lightgreen; /* Highlight during swapping */
+    }
+</style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body >
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="sorting">
+        <div class="flex justify-between">
+            <h1 class="text-white text-[40px] font-serif italic extended-underline h-14">Selection Sort</h1>
+            <select name="algorithm" id="algorithm"
+                class="mx-14 my-7 h-10 rounded-xl text-white bg-black w-40 font-serif italic">
+                <option href="" class="font-serif" value="selection">Selection Sort</option>
+                <option href="/bsort" class="font-serif" value="bubble">Bubble Sort</option>
+                <option href="/inssort" class="font-serif" value="insertion">Insertion Sort</option>
+                <option href="/msort" class="font-serif" value="merge">Merge Sort</option>
+                <option href="/qsort" class="font-serif" value="quick">Quick Sort</option>
+                <option href="/hsort" class="font-serif" value="heap">Heap Sort</option>
+            </select>
+        </div>
+
+        <p class="text-white"><b>Selection Sort</b> is a simple way to arrange numbers or items in order. Imagine you have a list of numbers, and you want to sort them from the smallest to the biggest. Here's how it works:
+
+            1. Start at the beginning of the list.
+            2. Look through all the numbers to find the smallest one.
+            3. Swap that smallest number with the first number in the list.
+            4. Now, ignore the first number (since it's already in the right place) and repeat the process for the remaining numbers.
+            5. Keep repeating until all the numbers are in the right order.
+            
+            For example, if you have the list [4, 2, 5, 1], you would first find 1 (the smallest) and swap it with 4, then find 2 and swap it with the second number, and so on. Selection sort keeps making small swaps until everything is arranged in order.
+            
+            Though it’s simple, selection sort can be slower than other methods for large lists.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="flex flex-col items-center">
+                <div class="flex justify-center mb-20 mt-24">
+                    <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element0" id="element0" value="{{ elements.0 }}" autofocus required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element1" id="element1" value="{{ elements.1 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element2" id="element2" value="{{ elements.2 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element3" id="element3" value="{{ elements.3 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element4" id="element4" value="{{ elements.4 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element5" id="element5" value="{{ elements.5 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element6" id="element6" value="{{ elements.6 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element7" id="element7" value="{{ elements.7 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element8" id="element8" value="{{ elements.8 }}" required>
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    type="number" name="element9" id="element9" value="{{ elements.9 }}" required> 
+                </div>
+                <div class="flex">
+                    <div class="flex flex-col px-5 items-center font-serif">
+                        <input type="range" id="speed" min="1" max="1000" value="100" name="speed"
+                            class="m-4 cursor-pointer" required />
+                        <label for="speed" class="text-white text-center bg-black rounded-md w-32">
+                            Speed:
+                            <span id="speed-value">100</span> ms
+                        </label>
+                    </div>
+                <div class="flex justify-center my-5">
+                    <button type="submit"
+                        class="bg-red-600 rounded-xl text-white font-serif h-10 w-32 hover:bg-red-800 focus:bg-red-800">
+                        Start Sorting
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('.elements');
+    
+            // Handle Enter key navigation for input fields
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault(); // Prevent default Enter key behavior
+                        const nextInput = inputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus(); // Move focus to the next input field
+                        }
+                    }
+                });
+            });
+            document.getElementById('algorithm').addEventListener('change', function() {
+                const selectedValue = this.value;
+                let url = '';
+                switch (selectedValue) {
+                    case 'selection':
+                        url = '';
+                        break;
+                    case 'bubble':
+                        url = '/bsort';
+                        break;
+                    case 'insertion':
+                        url = '/inssort';
+                        break;
+                }
+                window.location.href = url;
+            });
+            // Function to swap values of two input fields visually with transitions
+            async function swapInputs(index1, index2) {
+                const el1 = inputs[index1];
+                const el2 = inputs[index2];
+    
+    
+                // Swap values with a delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const tempValue = el1.value;
+                el1.value = el2.value;
+                el2.value = tempValue;
+            }
+    
+            // Selection Sort logic with visual transitions
+            async function selectionSort() {
+                const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // Delay function for visualization
+                const speed = 500; // Delay speed in milliseconds
+    
+                for (let i = 0; i < inputs.length - 1; i++) {
+                    let minIndex = i;
+    
+                    // Highlight the current element being compared
+                    inputs[i].classList.add('highlight');
+    
+                    for (let j = i + 1; j < inputs.length; j++) {
+                        inputs[j].classList.add('highlight'); // Highlight comparison
+                        await delay(speed);
+    
+                        if (parseInt(inputs[j].value) < parseInt(inputs[minIndex].value)) {
+                            minIndex = j;
+                        }
+    
+                        inputs[j].classList.remove('highlight'); // Remove highlight after comparison
+                    }
+    
+                    if (minIndex !== i) {
+                        // Swap the i position with the minimum
+                        await swapInputs(i, minIndex);
+                    }
+    
+                    // Remove highlight from the sorted element
+                    inputs[i].classList.remove('highlight');
+                }
+            }
+    
+            // Attach event listener to the sort button
+            document.querySelector('button[type="submit"]').addEventListener('click', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                await selectionSort(); // Start sorting
+            });
+        });
+    </script>
+    
+    
+</body>
+</html>

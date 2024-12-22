@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jg0g$^a7)b0-8th2kd)$xz8ykb4=d(fis93=2ov2*1+)qqidbv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['algovisualisers.com', 'kaustubhcode.com', '127.0.0.1']
 
 
 # Application definition
@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'ALGOVisualizer.urls'
@@ -109,6 +110,38 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+# settings.py
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Spanish'),
+    ('fr', 'French'),
+    ('de', 'German'),
+    ('hi', 'Hindi'),
+    ('bn', 'Bengali'),
+    ('ml', 'Malayalam'),
+    ('ta', 'Tamil'),
+    ('te', 'Telugu'),
+    ('mr', 'Marathi'),
+    ('gu', 'Gujarati'),
+    ('kn', 'Kannada'),
+    ('pa', 'Punjabi'),
+    ('ur', 'Urdu'),
+    ('ar', 'Arabic'),
+    ('pt', 'Portuguese'),
+    ('ru', 'Russian'),
+    ('tr', 'Turkish'),
+    ('sv', 'Swedish'),
+    ('pl', 'Polish'),
+    ('he', 'Hebrew'),
+    ('id', 'Indonesian'),
+    # Add more languages as needed
+]
+
+LOCALE_PATHS = [
+    # Path to your locale folder where translation files (.po/.mo) are stored
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 TIME_ZONE = 'UTC'
 
@@ -133,10 +166,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
 AUTH_USER_MODEL = 'home.CustomUser'
+
+CSRF_FAILURE_VIEW = 'home.views.csrf_failure'
+
+# Increase the maximum file size to 10 MB (adjust as needed)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB

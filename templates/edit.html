@@ -1,0 +1,147 @@
+<span class="hidden">{% load static %}</span>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Your Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+
+<body class="profile-body">
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div class="profile flex flex-col">
+    <nav class="flex items-center justify-between px-2 h-14">
+        <a class="flex text-xl font-serif text-white italic" href="index.html">AlgoVisualizer</a>
+        <div class=" relativev cursor-pointer " id="dropdownButton">
+            <div onclick="toggleDropdown()" class="flex text-white ml-40">
+            {% if profile_photo_base64 %}
+                <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                alt="Profile Photo">
+            {% else %}
+                <img src="/static/profile.png" class="h-10 rounded-full"
+                 alt="default Profile Photo">
+            {% endif %}
+            </div>
+            <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-2 mr-40 hidden">
+                <div
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    <a class="p-3 w-44" href=""> Your Profile</a>
+
+                </div>
+
+                <div
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    <a class="p-3 w-44" href="">Sign In / Sign Up</a>
+                </div>
+                <div
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    <a class="p-3 w-44" href="contact.html">Contact Us</a>
+                </div>
+                <div
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    <a class="p-3 w-44" href="">Chat with Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="flex">
+        <div class="h-[800px] w-[500px] m-2 rounded-3xl border-2 border-red-700 profilediv">
+            <div class="flex flex-col items-center">
+                <div class="flex">
+                    <div class="text-white font-serif font-bold text-xl mt-2">Your Profile</div>
+                </div>
+
+
+                <div class="flex">
+                    <div class="flex justify-end items-end relative">
+                {% if profile_photo_base64 %}
+                    <img class="h-44 w-44 rounded-full border-4 border-white mt-3" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                    alt="Profile Photo">
+                {% else %}
+                    <img src="/static/profile.png" class="h-40"
+                    alt="default Profile Photo">
+                {% endif %}
+                
+                    <label for="profile_photo" class="absolute cursor-pointer"><img class="h-8 rounded-full" src="/static/edit2.jpg" alt="">
+                        <input type="file" name="profile_photo" id="profile_photo" id="profileimage" class="hidden">
+                    </label>
+                
+                    </div>
+
+                
+                </div>
+                
+                <div class="flex text-white font-serif mt-3">
+                    <p>@{{ user.username }}</p>
+                </div>
+                
+                
+            </div>
+            <div class="mt-10 text-white ml-5">
+                <div class="m-1 font-serif text-xl italic underline">Bio</div>
+                <p>{{user.bio}}</p>
+                <div class="mt-2 m-1 font-serif text-xl italic underline">
+                    Institute
+                </div>
+                <p>{{user.institute}}</p>
+            </div>
+        </div>
+        <div class="profilediv h-[800px] w-[1000px] border-2 border-red-700 rounded-3xl m-2 flex flex-col py-2">
+            <div class="text-white text-center font-serif text-xl font-bold ">Edit Profile</div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="flex mt-5">
+                    <label for="first_name" class="flex flex-col text-white font-serif ml-5">First Name
+                        <input type="text" name="first_name" value="{{ user.first_name }}" placeholder="First Name"
+                            class="namediv text-white my-2 h-12 w-80 border-2 border-white px-2 input rounded-xl mx-0.5">
+                    </label>
+                    <label for="last_name" class="flex flex-col text-white font-serif px-5">Last Name
+                        <input type="text"  name="last_name" value="{{ user.last_name }}" placeholder="Last Name"
+                            class="namediv text-white my-2 h-12 w-80 border-2 border-white px-2 input rounded-xl mx-0.5">
+                    </label>
+                </div>
+                <label class="flex flex-col mt-3 ml-5 text-white font-serif" for="phone_no">Phone No.
+                    <input type="text" name="phone_no" value="{{ user.phone_no }}" placeholder="Enter your Phone number"
+                        class="namediv text-white  h-12 w-[665px] border-2 border-white px-2 input rounded-xl mx-0.5">
+                </label>
+                <label class="flex flex-col mt-3 ml-5 text-white font-serif" for="email">E-mail
+                    <input type="text" name="email" value="{{ user.email }}"placeholder="Enter your E-mail"
+                        class="namediv text-white h-12 w-[665px] border-2 border-white px-2 input rounded-xl mx-0.5">
+                </label>
+                <label class="flex flex-col mt-5 ml-5 text-white font-serif" for="username">Username
+                    <input type="text" name="username" value="{{ user.username }}" placeholder="Username"
+                        class="namediv text-white my-2 h-12 w-[660px] border-2 border-white px-2 input rounded-xl mx-0.5">
+                </label>
+                <label class="flex flex-col mt-5 ml-5 text-white font-serif" for="bio">Bio
+                    <input type="text" name="bio" value="{{ user.bio }}" placeholder="Write something"
+                        class="namediv text-white my-2 h-20 pb-10 w-[660px] border-2 border-white px-2 input rounded-xl mx-0.5">
+                </label>
+                <label class="flex flex-col mt-5 ml-5 text-white font-serif" for="institute">Institute
+                    <input type="text" name="institute" value="{{ user.institute }}" placeholder="Enter your institute "
+                        class="namediv text-white my-2 pb-10 h-20 w-[660px] border-2 border-white px-2 input rounded-xl mx-0.5">
+                </label>
+                <button class="bg-red-800 h-10 w-32 font-serif text-white rounded-xl ml-6 mt-5 cursor-pointer">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+        </div>
+    </div>
+    <script>
+        function toggleDropdown() {
+            let dropdown = document.querySelector('#dropdownButton #dropdown');
+            dropdown.classList.toggle("hidden")
+        }
+    </script>
+    
+</body>
+
+</html>
