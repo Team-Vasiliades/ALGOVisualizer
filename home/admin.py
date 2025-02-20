@@ -12,3 +12,13 @@ admin.site.index_title = "Welcome to AlgoVisualizer Admin Portal"
 admin.site.register(CustomUser)
 
 # Register your models here.
+#Chat
+
+# Register your models here.
+from home.models import Chat, Chatroom
+
+# Register your models here.
+
+admin.site.register(Chat)
+admin.site.register(Chatroom)
+#Chat Lobby

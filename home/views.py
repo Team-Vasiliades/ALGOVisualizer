@@ -13,6 +13,18 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import activate
 import base64
+#chat
+from django.contrib.auth.models import User
+from home.models import Chatroom, Chat
+import openai
+from django.http import JsonResponse
+from django.shortcuts import render, redirect 
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import CustomUser # Use CustomUser if you have extended User
+import base64
 # Create your views here.
 # views.py
 # views.py
@@ -278,17 +290,16 @@ def insdel(request):
    return render(request,'insdel.html')
 
 
-# Stack implementation
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+
 class Stack:
-    def __init__(self, max_size=5):
+    def _init_(self):
         self.items = []
-        self.max_size = max_size
-        
+
     def push(self, item):
-        if len(self.items) < self.max_size:
-            self.items.append(item)
-        else:
-            return "Stack is full"
+        self.items.append(item)
 
     def pop(self):
         if self.items:
@@ -303,35 +314,55 @@ class Stack:
     def get_stack(self):
         return self.items
 
-
-stack = Stack()
-
+@csrf_exempt
 def stack_visualizer(request):
+    # Initialize an empty stack for each new session or page load
+    if 'stack' not in request.session:
+        request.session['stack'] = []
+
+    # Check if we are starting a new session, if so, reset the stack
+    if request.method == "GET" and not request.session.get('stack_initialized', False):
+        request.session['stack'] = []  # Clear stack on new session
+        request.session['stack_initialized'] = True  # Mark session as initialized
+
+    # Get the current stack from the session
+    stack = request.session['stack']
+    top = stack[-1] if stack else None
+
+    # Handle operations based on the selected structure
     if request.method == "POST":
         operation = request.POST.get("operation")
         value = request.POST.get("value")
 
         if operation == "push" and value:
-            error_message = stack.push(value)
-            if error_message:
-                messages.error(request, error_message)  # Store error message in session
-        elif operation == "pop":
-            popped = stack.pop()
-            if not popped:
-                messages.error(request, "Stack is empty, cannot pop!")
-        elif operation == "top":
-            top_element = stack.top()
-            if top_element:
-                messages.info(request, f"Top element is: {top_element}")
-            else:
-                messages.error(request, "Stack is empty, no top element!")
+            # Push the value onto the stack
+            stack.append(value)
+            request.session['stack'] = stack  # Save updated stack in session
+            messages.success(request, f"Value {value} pushed onto the stack!")
 
-        # Redirect to prevent form resubmission
+        elif operation == "pop":
+            # Pop the top value from the stack
+            popped_value = stack.pop() if stack else None
+            request.session['stack'] = stack  # Save updated stack in session
+            if popped_value is not None:
+                messages.success(request, f"Value {popped_value} popped from the stack!")
+            else:
+                messages.error(request, "Stack is empty!")
+
+        elif operation == "top":
+            # Show the top value without removing it
+            top_value = stack[-1] if stack else None
+            if top_value is not None:
+                messages.success(request, f"Top element: {top_value}")
+            else:
+                messages.error(request, "Stack is empty!")
+
+        # Redirect to clear POST data and avoid re-submission on refresh
         return redirect('stack_visualizer')
 
-    # Render the page for GET requests
     return render(request, "stack_visualizer.html", {
-        "stack": stack.get_stack(),
+        "stack": stack,
+        "top": top,
     })
     
 # Queue Implementation
@@ -597,3 +628,80 @@ def edit_profile(request):
         profile_photo_base64 = base64.b64encode(user.profile_photo).decode('utf-8')
 
     return render(request, 'edit.html', {'user': user, 'profile_photo_base64': profile_photo_base64})
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import google.generativeai as genai
+import os
+
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDY032c8BGyN-TfqazVu3br6WnuudKzZV0")
+genai.configure(api_key=GEMINI_API_KEY)
+
+@csrf_exempt  
+def ai_chat(request):
+    if request.method == "POST":
+        user_message = request.POST.get('message', '').strip()
+
+        if not user_message:
+            return JsonResponse({'reply': "Error: No message received."}, status=400)
+
+        try:
+            model = genai.GenerativeModel("gemini-pro") 
+            response = model.generate_content(user_message)
+            
+            ai_response = response.text if response else "Error: No response from AI"
+            return JsonResponse({'reply': ai_response})
+
+        except Exception as e:
+            return JsonResponse({'reply': f"Error: {str(e)}"}, status=500)
+
+    return render(request, "chat.html") 
+
+
+
+#Chat Lobby
+import random, string
+import json
+
+
+def chatlobby(request):
+    return render(request, 'chatlobby.html')
+
+
+def lobby(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        lobby_code = request.POST.get('lobbycode')
+
+        #checking if lobby code exists
+        f=open("static/lobbies.json")
+        lobbies=json.load(f)
+        f.close()
+
+        if lobby_code not in lobbies:
+            return render(request, 'chatlobby.html', {'message':'Lobby does not exist. Please check your lobby code.'})
+
+    return render(request, 'lobby.html', {'user_name': name, 'lobbycode':lobby_code, 'room_name':lobbies[lobby_code]})
+
+
+def create_lobby(request):
+    if request.method == 'POST':
+        lobby_name = request.POST.get('lobby_name')
+        
+        f=open("static/lobbies.json")
+        lobbies=json.load(f)
+        f.close()
+
+        while True:
+            lobby_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
+            if lobby_code not in lobbies:
+                break
+        
+        lobbies.update({lobby_code:lobby_name})
+        with open("static/lobbies.json","w") as file:
+            json.dump(lobbies, file)
+        
+        return render(request, 'create_lobby.html',{'lobby_code': lobby_code})
+    
+    return render(request, 'create_lobby.html')

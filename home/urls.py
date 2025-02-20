@@ -18,5 +18,8 @@ urlpatterns = [
     path('stack_visualizer/',views.stack_visualizer,name= 'stack_visualizer'),
     path('queue_visualizer/',views.queue_visualizer,name= 'queue_visualizer'),
     path('set_language/', views.set_language, name='set_language'),
-    
+    path('ai_chat/', views.ai_chat, name='ai_chat'), 
+    path('chatlobby/', views.chatlobby, name='chatlobby'),
+    path('lobby/create_lobby/', views.create_lobby, name='create_lobby'),
+    path('lobby/', views.lobby, name='lobby')
 ]

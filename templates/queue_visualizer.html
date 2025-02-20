@@ -30,7 +30,34 @@
     <video class="background-video h-auto " muted loop autoplay plays-inline>
         <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
     </video>
-    <div class="flex justify-between">
+    <nav class="flex items-center justify-between px-2 h-12 fixed top-0 w-full">
+        <a class="flex text-xl font-serif text-white italic" href="home">AlgoVisualizer</a>
+        <div class="relative cursor-pointer" id="dropdownButton">
+            <div onclick="toggleDropdown()" class="flex text-white ml-40">
+                {% if profile_photo_base64 %}
+                <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                    alt="Profile Photo">
+                {% else %}
+                <img src="/static/profile.png" class="h-10 rounded-full" alt="default Profile Photo">
+                {% endif %}
+            </div>
+            <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-1 mr-40 hidden">
+                <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                    <a class="p-3 w-44" href="{% if user.is_authenticated %}/profile{% else %}/{% endif %}"> Your Profile</a>
+                </div>
+                <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                    <a class="p-3 w-44" href="login">Sign In / Sign Up</a>
+                </div>
+                <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                    <a class="p-3 w-44" href="about">Contact Us</a>
+                </div>
+                <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                    <a class="p-3 w-44" href="chatlobby">Chat</a>
+                </div>
+            </div>
+        </div>
+    </nav> 
+    <div class="flex justify-between mt-14">
         <div>
             <h1 class="text-4xl font-serif text-white mt-5 ml-3">Data Structure Visualizer</h1>
             <p class="w-96 text-white m-3 text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem reprehenderit
@@ -189,7 +216,29 @@
         updateButtonsVisibility();
         render();
     </script>
+ <script>
+    function toggleDropdown() {
+        const dropdown = document.querySelector('#dropdown');
+        dropdown.classList.toggle('hidden');
+    }
 
+    // Close the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+        const dropdown = document.querySelector('#dropdown');
+        const dropdownButton = document.querySelector('#dropdownButton');
+
+        // Check if the click is outside the dropdown and the button
+        if (!dropdownButton.contains(event.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // Hide the dropdown when the page is unloaded (redirected or refreshed)
+    window.addEventListener('beforeunload', function () {
+        const dropdown = document.querySelector('#dropdown');
+        dropdown.classList.add('hidden');
+    });
+</script>
 
 </body>
 

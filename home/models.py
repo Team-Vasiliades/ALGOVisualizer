@@ -24,3 +24,26 @@ class CustomUser(AbstractUser):
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
     )
+
+from django.contrib.auth.models import User
+
+# Create your models here.
+
+class HomeChatroom(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+
+class Chatroom(models.Model):
+    name = models.CharField(max_length=5000)
+    
+    def _str_(self):
+        return self.name
+
+class Chat(models.Model):
+    chat_content = models.CharField(max_length=5000)
+    user = models.CharField(max_length=5000)
+    room = models.ForeignKey(Chatroom, on_delete=models.CASCADE)
+    timestamp = models.DateField(auto_now_add=True)
+
+    

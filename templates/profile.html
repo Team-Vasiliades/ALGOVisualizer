@@ -17,8 +17,8 @@
         <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
     </video>
     <div class="profile">
-    <nav class="flex items-center justify-between px-2 h-14">
-        <a class="flex text-xl font-serif text-white italic" href="index.html">AlgoVisualizer</a>
+    <nav class="flex items-center justify-between px-2 h-12">
+        <a class="flex text-xl font-serif text-white italic" href="home">AlgoVisualizer</a>
         <div class=" relativev cursor-pointer " id="dropdownButton">
             <div onclick="toggleDropdown()" class="flex text-white ml-40">
             {% if profile_photo_base64 %}
@@ -31,20 +31,20 @@
             </div>
             <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-2 mr-40 hidden">
                 <div
-                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
                     <a class="p-3 w-44" href=""> Your Profile</a>
                 </div>
                 <div
-                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
                     <a class="p-3 w-44" href="">Sign In / Sign Up</a>
                 </div>
                 <div
-                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
                     <a class="p-3 w-44" href="contact.html">Contact Us</a>
                 </div>
                 <div
-                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
-                    <a class="p-3 w-44" href="">Chat with Us</a>
+                    class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                    <a class="p-3 w-44" href="chatlobby">Chat</a>
                 </div>
             </div>
         </div>
@@ -99,10 +99,28 @@
     </div>
     <script>
         function toggleDropdown() {
-            let dropdown = document.querySelector('#dropdownButton #dropdown');
-            dropdown.classList.toggle("hidden")
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.toggle('hidden');
         }
+    
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.querySelector('#dropdown');
+            const dropdownButton = document.querySelector('#dropdownButton');
+    
+            // Check if the click is outside the dropdown and the button
+            if (!dropdownButton.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    
+        // Hide the dropdown when the page is unloaded (redirected or refreshed)
+        window.addEventListener('beforeunload', function () {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.add('hidden');
+        });
     </script>
+    
     <script>
         const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug","Sep","Oct","Nov","Dec"];
         const yValues = [55, 49, 44, 24, 15, 44, 34, 36, 57,45,78,35];

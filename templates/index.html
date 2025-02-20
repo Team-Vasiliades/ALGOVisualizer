@@ -13,7 +13,7 @@
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 10px 20px;
+            padding: 10px 15px;
             font-size: 16px;
             cursor: pointer;
         }
@@ -41,36 +41,37 @@
             <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
         </video>
         <div>
-            <nav class="flex items-center justify-between px-2 h-12">
-                <a class="flex text-xl font-serif text-white italic" href="index.html">AlgoVisualizer</a>
+            <nav class="flex items-center justify-between px-2 h-12 fixed top-0 w-full">
+                <a class="flex text-xl font-serif text-white italic" href="home">AlgoVisualizer</a>
                 <div class="relative cursor-pointer" id="dropdownButton">
                     <div onclick="toggleDropdown()" class="flex text-white ml-40">
                         {% if profile_photo_base64 %}
-                        <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                        <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}"
                             alt="Profile Photo">
                         {% else %}
                         <img src="/static/profile.png" class="h-10 rounded-full" alt="default Profile Photo">
                         {% endif %}
                     </div>
                     <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-1 mr-40 hidden">
-                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
-                            <a class="p-3 w-44" href="{% if user.is_authenticated %}/profile{% else %}/{% endif %}"> Your Profile</a>
+                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                            <a class="p-3 w-44" href="{% if user.is_authenticated %}/profile{% else %}/{% endif %}">
+                                Your Profile</a>
                         </div>
-                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
                             <a class="p-3 w-44" href="login">Sign In / Sign Up</a>
                         </div>
-                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
+                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
                             <a class="p-3 w-44" href="about">Contact Us</a>
                         </div>
-                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl hover:border-2 hover:border-white">
-                            <a class="p-3 w-44" href="">Chat with Us</a>
+                        <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                            <a class="p-3 w-44" href="chatlobby">Chat</a>
                         </div>
                     </div>
                 </div>
             </nav>
 
-            <form method="get" action="">
-                <label for="language-select">
+            <form method="get" action="" class="m-3 mt-16">
+                <label for="language-select" class="">
                     <select id="language-select" name="lang" class="language-selector" onchange="this.form.submit()">
                         <option value="en">{% trans "English" %}</option>
                         <option value="es">{% trans "Spanish" %}</option>
@@ -97,30 +98,55 @@
                     </select>
                 </label>
             </form>
-
-            <div class="algo flex justify-center text-white font-serif text-8xl py-10">{% trans "AlgoVisualizer" %}</div>
+            <div>
+                <a href="ai_chat">
+                    <button
+                        class="h-10 w-32 bg-red-600 font-serif text-white rounded-xl ml-3 hover:bg-red-800">AlgoAI</button>
+                </a>
+            </div>
+            <div class="algo flex justify-center text-white font-serif text-8xl pb-8">{% trans "AlgoVisualizer" %}</div>
             <div class="column flex justify-around items-center">
-                <div class="content text-2xl text-black w-96 h-96 mt-10 flex-col justify-center bg-white rounded-md">
+                <div
+                    class="content text-2xl text-black w-96 h-[22rem] mt-10 flex-col justify-center bg-white rounded-md">
                     <a href="/ssort">
-                        <h2 class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">{% trans "Sorting" %}</h2>
+                        <h2
+                            class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">
+                            {% trans "Sorting" %}</h2>
                         <p class="text-lg py-6 text-center">
-                            {% trans "Sorting is like putting things in order. Imagine you have a bunch of numbers or toys scattered around, and you want to arrange them from the smallest to the biggest (or biggest to smallest). Sorting helps you organize them. There are different ways to do it, like comparing and swapping items until they’re in the right order. It’s like tidying up but with numbers or things!" %}
+                            {% trans "Sorting is like putting things in order. Imagine you have a bunch of numbers or
+                            toys scattered around, and you want to arrange them from the smallest to the biggest (or
+                            biggest to smallest). Sorting helps you organize them. There are different ways to do it,
+                            like comparing and swapping items until they’re in the right order. It’s like tidying up but
+                            with numbers or things!" %}
                         </p>
                     </a>
                 </div>
-                <div class="content text-2xl text-black w-96 h-96 mt-10 flex-col justify-center bg-white rounded-md">
+                <div
+                    class="content text-2xl text-black w-96 h-[22rem] mt-10 flex-col justify-center bg-white rounded-md">
                     <a href="/stack_visualizer">
-                        <h2 class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">{% trans "Stack" %}</h2>
+                        <h2
+                            class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">
+                            {% trans "Stack" %}</h2>
                         <p class="text-lg py-6 text-center">
-                            {% trans "A <b>stack</b> is like a stack of plates. You put plates on top one by one, and when you need a plate, you take the one on the top. In a stack, you can only add or remove things from the top, like stacking and unstacking plates. It's called \"Last In, First Out\" (LIFO) because the last thing you add is the first one you take out." %}
+                            {% trans "A <b>stack</b> is like a stack of plates. You put plates on top one by one, and
+                            when you need a plate, you take the one on the top. In a stack, you can only add or remove
+                            things from the top, like stacking and unstacking plates. It's called \"Last In, First Out\"
+                            (LIFO) because the last thing you add is the first one you take out." %}
                         </p>
                     </a>
                 </div>
-                <div class="content text-2xl text-black w-96 h-96 mt-10 flex-col justify-center bg-white rounded-md">
+                <div
+                    class="content text-2xl text-black w-96 h-[22rem] mt-10 flex-col justify-center bg-white rounded-md">
                     <a href="/queue_visualizer">
-                        <h2 class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">{% trans "Queue" %}</h2>
+                        <h2
+                            class="flex justify-center font-serif hover:underline cursor-pointer text-red-600 font-bold italic">
+                            {% trans "Queue" %}</h2>
                         <p class="text-lg py-6 text-center">
-                            {% trans "A <b>queue</b> is like a line of people waiting for something, where the first person in the line is served first. This is called **First In, First Out (FIFO)**. For example, when waiting in line for a bus, the person who comes first gets on the bus first. In computers, queues are used to manage tasks like processing messages or printing documents, ensuring everything happens in the right order." %}
+                            {% trans "A <b>queue</b> is like a line of people waiting for something, where the first
+                            person in the line is served first. This is called **First In, First Out (FIFO)**. For
+                            example, when waiting in line for a bus, the person who comes first gets on the bus first.
+                            In computers, queues are used to manage tasks like processing messages or printing
+                            documents, ensuring everything happens in the right order." %}
                         </p>
                     </a>
                 </div>
@@ -130,10 +156,28 @@
 
     <script>
         function toggleDropdown() {
-            let dropdown = document.querySelector('#dropdownButton #dropdown');
-            dropdown.classList.toggle("hidden");
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.toggle('hidden');
         }
+
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.querySelector('#dropdown');
+            const dropdownButton = document.querySelector('#dropdownButton');
+
+            // Check if the click is outside the dropdown and the button
+            if (!dropdownButton.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Hide the dropdown when the page is unloaded (redirected or refreshed)
+        window.addEventListener('beforeunload', function () {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.add('hidden');
+        });
     </script>
+
 </body>
 
 </html>

@@ -201,8 +201,34 @@
 <body >
     <video class="background-video h-auto " muted loop autoplay plays-inline>
         <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
-    </video>
-    <div class="sorting">
+    </video><nav class="flex items-center justify-between px-2 h-12 fixed top-0 w-full">
+            <a class="flex text-xl font-serif text-white italic" href="home">AlgoVisualizer</a>
+            <div class="relative cursor-pointer" id="dropdownButton">
+                <div onclick="toggleDropdown()" class="flex text-white ml-40">
+                    {% if profile_photo_base64 %}
+                    <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                        alt="Profile Photo">
+                    {% else %}
+                    <img src="/static/profile.png" class="h-10 rounded-full" alt="default Profile Photo">
+                    {% endif %}
+                </div>
+                <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-1 mr-40 hidden">
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="{% if user.is_authenticated %}/profile{% else %}/{% endif %}"> Your Profile</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="login">Sign In / Sign Up</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="about">Contact Us</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="chatlobby">Chat</a>
+                    </div>
+                </div>
+            </div>
+        </nav> 
+    <div class="sorting mt-14"> 
         <div class="flex justify-between">
             <h1 class="text-white text-[40px] font-serif italic extended-underline h-14">Selection Sort</h1>
             <select name="algorithm" id="algorithm"
@@ -232,25 +258,25 @@
             {% csrf_token %}
             <div class="flex flex-col items-center">
                 <div class="flex justify-center mb-20 mt-24">
-                    <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                    <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element0" id="element0" value="{{ elements.0 }}" autofocus required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element1" id="element1" value="{{ elements.1 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element2" id="element2" value="{{ elements.2 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element3" id="element3" value="{{ elements.3 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element4" id="element4" value="{{ elements.4 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element5" id="element5" value="{{ elements.5 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element6" id="element6" value="{{ elements.6 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element7" id="element7" value="{{ elements.7 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element8" id="element8" value="{{ elements.8 }}" required>
-                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-black rounded-lg mx-2"
+                <input class="elements h-16 w-16 text-3xl sortinput border-0 focus:border-none focus:ring-0 focus:outline-none text-white  rounded-lg mx-2"
                     type="number" name="element9" id="element9" value="{{ elements.9 }}" required> 
                 </div>
                 <div class="flex">
@@ -355,7 +381,29 @@
             });
         });
     </script>
+     <script>
+        function toggleDropdown() {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.toggle('hidden');
+        }
     
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.querySelector('#dropdown');
+            const dropdownButton = document.querySelector('#dropdownButton');
+    
+            // Check if the click is outside the dropdown and the button
+            if (!dropdownButton.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    
+        // Hide the dropdown when the page is unloaded (redirected or refreshed)
+        window.addEventListener('beforeunload', function () {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.add('hidden');
+        });
+    </script>
     
 </body>
 </html>

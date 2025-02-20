@@ -18,12 +18,8 @@
             <h1 class="wtc">Welcome To Chat</h1>
             <div class="rooms">
                 <a href="/chat/AI" class="roomsbtn rounded-xl">AlgoAI</a>
-                <a href="/chat/Room1" class="roomsbtn rounded-xl">Public Room 1</a>
-                <a href="/chat/Room2" class="roomsbtn rounded-xl">Public Room 2</a>
-                <a href="/chat/Room3" class="roomsbtn rounded-xl">Public Room 3</a>
-                <a href="/chat/Room4" class="roomsbtn rounded-xl">Public Room 4</a>
-                <a href="/chat/Room5" class="roomsbtn rounded-xl">Public Room 5</a>
             </div>
+            
         </div>
 
         <div class="chat-room">
@@ -36,7 +32,7 @@
                 {% endif %}
             </div>
             <div class="chat-input">
-                <input class="input-msg rounded-xl p-2" id="input" type="text">
+                <input class="input-msg rounded-xl p-2" id="input" type="text" placeholder="Write your message here">
                 <button class="chat-btn rounded-xl m-1" id="submit">Send</button>
             </div>
         </div>
@@ -68,12 +64,11 @@
             document.querySelector('#chatTextArea').innerHTML =
                 '<p class="text-center text-danger">Please select a valid chat room from the left.</p>';
         } else if (roomName === "AI") {
-            document.querySelector('#input').disabled = false;
-            document.querySelector('#submit').disabled = false;
-            document.querySelector('#submit').onclick = function () {
-                const messageInputDom = document.querySelector('#input');
-                const message = messageInputDom.value.trim();
+            const inputField = document.querySelector('#input');
+            const submitButton = document.querySelector('#submit');
 
+            function sendMessage() {
+                const message = inputField.value.trim();
                 if (message !== "") {
                     fetch('/ai_chat/', {
                         method: 'POST',
@@ -92,10 +87,9 @@
                             return response.json();
                         })
                         .then(data => {
-                            document.querySelector('#chatTextArea').innerHTML += `
-                            <p><b>You:</b> ${message}</p>
-                            <p><b>AI:</b> ${data.reply}</p><br>
-                        `;
+                            document.querySelector('#chatTextArea').innerHTML += 
+                            `<p><b>You:</b> ${message}</p>` +
+                            `<p><b>AI:</b> ${data.reply}</p><br>`;
                             const msgDiv = document.querySelector('#chatTextArea');
                             msgDiv.scrollTop = msgDiv.scrollHeight;
                         })
@@ -104,13 +98,19 @@
                             alert('Failed to fetch AI response. Please try again later.');
                         });
 
-                    messageInputDom.value = '';
+                    inputField.value = '';
                 }
-            };
+            }
+
+            submitButton.onclick = sendMessage;
+            inputField.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
+  
 </body>
+
 </html>

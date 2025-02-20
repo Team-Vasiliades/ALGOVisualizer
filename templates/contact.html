@@ -11,47 +11,104 @@
 </head>
 
 <body class="contact">
-    <nav class="flex items-center justify-between px-2 h-10">
-        <a class="flex text-xl font-serif text-white italic" href="index.html">AlgoVisualizer</a>
-        <a href="#">
-            <img class="profile h-8" src="/static/profile.png" alt="">
-        </a>
-    </nav>
-    <div class="text-white text-5xl text-center italic underline contactus pt-5 pb-10">Contact Us</div>
-    <div class="details text-center pb-10">
-        <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">E-mail:</a>
-            sampleemail@gmail.com</div>
-        <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">Phone No. :</a>
-            0761-XXXX45</div>
-        <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">Address:</a> Gyan
-            Ganga Institute Of Technology And Sciences, Jabalpur</div>
-    </div>
-    <div class="text-white text-center font-serif italic text-3xl underline teammembers">MEMBERS OF TEAM VASILIADES
-    </div>
-    <div class="images my-5">
-        <div class="flex first">
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/sayman.jpg" alt="">
-                <p class="font-serif pb-5 text-center">SAYMAN LAL</p>
+    <video class="background-video h-auto " muted loop autoplay plays-inline>
+        <source src="/static/ALGOVisualizer.mp4" type="video/mp4">
+    </video>
+    <div>
+        <nav class="flex items-center justify-between px-2 h-12 fixed top-0 w-full">
+            <a class="flex text-xl font-serif text-white italic" href="home">AlgoVisualizer</a>
+            <div class="relative cursor-pointer" id="dropdownButton">
+                <div onclick="toggleDropdown()" class="flex text-white ml-40">
+                    {% if profile_photo_base64 %}
+                    <img class="h-10 w-10 rounded-full" src="data:image/jpeg;base64,{{ profile_photo_base64 }}" 
+                        alt="Profile Photo">
+                    {% else %}
+                    <img src="/static/profile.png" class="h-10 rounded-full" alt="default Profile Photo">
+                    {% endif %}
+                </div>
+                <div id="dropdown" class="dropdown rounded-xl border-2 border-red-900 absolute mt-1 mr-40 hidden">
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="{% if user.is_authenticated %}/profile{% else %}/{% endif %}"> Your Profile</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="login">Sign In / Sign Up</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="about">Contact Us</a>
+                    </div>
+                    <div class="hover:bg-red-900 font-serif text-md w-44 p-3 text-white rounded-xl">
+                        <a class="p-3 w-44" href="chatlobby">Chat</a>
+                    </div>
+                </div>
             </div>
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/kaustubh.jpg" alt="">
-                <p class="font-serif pb-5 text-center">KAUSTUBH SEN</p>
+        </nav>  
+
+        <div class="text-white text-5xl text-center italic underline contactus pt-5 pb-10 mt-10">Contact Us</div>
+        <div class="details text-center pb-10">
+            <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">E-mail:</a>
+                algovisualizer.teamvasiliades@gmail.com</div>
+            <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">Phone No. :</a>
+                +91-9179387285</div>
+            <div class="text-white text-xl font-serif py-1"> <a class="text-xl text-red-500 " href="#">Address:</a> Gyan
+                Ganga Institute Of Technology And Sciences, Jabalpur</div>
+        </div>
+        <div class="text-white text-center font-serif italic text-3xl underline teammembers">MEMBERS OF TEAM VASILIADES
+        </div>
+        <div class="images my-5">
+            <div class="flex first">
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/sayman.jpg"
+                        alt="Sayman">
+                    <p class="font-serif pb-5 text-center"><a href="">SAYMAN LAL</a></p>
+                </div>
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/kaustubhsenn.png"
+                        alt="Kaustubh">
+                    <p class="font-serif pb-5 text-center"><a href="">KAUSTUBH SEN</a></p>
+                </div>
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/utkarshkushwaha.png"
+                        alt="Utkarsh">
+                    <p class="font-serif pb-5 text-center"><a href="">UTKARSH KUSHWAHA</a></p>
+                </div>
             </div>
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/utkarsh.jpg" alt="">
-                <p class="font-serif pb-5 text-center">UTKARSH KUSHWAHA</p>
+            <div class="flex justify-end second">
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/praveen.jpg"
+                        alt="Praveen">
+                    <p class="font-serif pb-5 text-center"><a href="">PRAVEEN RAJAK</a></p>
+                </div>
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/yashnamdeo.png"
+                        alt="Yash">
+                    <p class="font-serif pb-5 text-center"><a href="">YASH NAMDEO</a></p>
+                </div>
+                <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src=""
+                        alt="Utkarsh 2.O">
+                    <p class="font-serif pb-5 text-center"><a href="">UTKARSH KUSHWAHA</a></p>
+                </div>
             </div>
         </div>
-        <div class="flex justify-end second">
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/praveen.jpg" alt="">
-                <p class="font-serif pb-5 text-center">PRAVEEN RAJAK</p>
-            </div>
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/yash.jpg" alt="">
-                <p class="font-serif pb-5 text-center">YASH NAMDEO</p>
-            </div>
-            <div class="text-white mx-10 my-10"><img class="members rounded-xl w-72 h-80" src="/static/yash.jpg" alt="">
-                <p class="font-serif pb-5 text-center">UTKARSH</p>
-            </div>
-        </div>
     </div>
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+    
+        // Close the dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.querySelector('#dropdown');
+            const dropdownButton = document.querySelector('#dropdownButton');
+    
+            // Check if the click is outside the dropdown and the button
+            if (!dropdownButton.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    
+        // Hide the dropdown when the page is unloaded (redirected or refreshed)
+        window.addEventListener('beforeunload', function () {
+            const dropdown = document.querySelector('#dropdown');
+            dropdown.classList.add('hidden');
+        });
+    </script>
+    
 </body>
 
 </html>

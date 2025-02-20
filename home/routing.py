@@ -1,7 +1,7 @@
+#Chat Lobby
 from django.urls import re_path
-from home import consumers
+from . import consumers
 
 websocket_urlpatterns = [
-    re_path(r'ws/chat/(?P<room_name>\w+)/$', consumers.ChatRoomConsumer.as_asgi()),
-   
+    re_path(r'ws/socket-server/(?P<lobbycode>\w+)/$', consumers.ChatConsumer.as_asgi())
 ]
