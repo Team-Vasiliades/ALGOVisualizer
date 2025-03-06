@@ -1,3 +1,1 @@
 hi welcome to algovisualizer
-
-
